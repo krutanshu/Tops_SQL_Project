@@ -1,7 +1,9 @@
 create database ola;
 use ola;
 show tables;
+create table new_entries(tripid integer,faremethod integer,fare integer,loc_from integer,loc_to integer,driverid integer,custid integer,distance integer,duration integer);
 CREATE TABLE  trips(tripid integer,faremethod integer,fare integer,loc_from integer,loc_to integer,driverid integer,custid integer,distance integer,duration integer); 
+create table new_trips (tripid integer,faremethod integer,fare integer,loc_from integer,loc_to integer,driverid integer,custid integer,distance integer,duration integer ,action_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

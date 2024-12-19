@@ -65,3 +65,42 @@ select d.duration, count(t.tripid)as total_trips from trips t join  duration d o
 
 -- which driver , customer pair had more orders
 SELECT driverid, custid, COUNT(tripid) AS OrderCount FROM trips GROUP BY driverid, custid ORDER BY OrderCount DESC;
+
+select t.custid, l.assembly1 from trips t join loc l on t.loc_from = l.id; 
+
+-- procedure --
+-- Show customer by Pick up location --
+DELIMITER //
+
+CREATE PROCEDURE show_customer_by_pickup_location (IN location VARCHAR(35))
+BEGIN
+    SELECT t.custid
+    FROM trips t
+    JOIN loc l ON t.loc_from = l.id
+    WHERE l.assembly1 = location;
+END //
+DELIMITER ;
+
+-- Show customer by drop off location --
+DELIMITER //
+CREATE PROCEDURE show_customer_by_dropoff_location (IN location VARCHAR(35))
+BEGIN
+    SELECT t.custid
+    FROM trips t
+    JOIN loc l ON t.loc_to = l.id
+    WHERE l.assembly1 = location;
+END //
+DELIMITER ;
+
+
+-- trigger for adding if any new customer entry is recorded
+
+DELIMITER $$
+CREATE TRIGGER after_customer_insert
+AFTER INSERT ON trips
+FOR EACH ROW
+BEGIN
+    INSERT INTO new_trips (tripid ,faremethod ,fare ,loc_from ,loc_to ,driverid ,custid ,distance ,duration )
+    VALUES (new.tripid ,new.faremethod ,new.fare ,new.loc_from ,new.loc_to ,new.driverid ,new.custid ,new.distance ,new.duration);
+END;
+$$
